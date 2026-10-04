@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BIJI — Staff Panel</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/panels.css" />
+</head>
+<body>
+  <!-- ============ AUTH ============ -->
+  <div id="authView" class="auth-wrap hidden">
+    <div class="auth-card">
+      <div class="brand">
+        <span class="brand-mark">BI<span class="slash">I</span>JI</span>
+        <span class="brand-by">BY CHEF BROWN</span>
+      </div>
+      <h1>Staff Login</h1>
+      <p class="sub">Verify &amp; redeem customer coupons</p>
+      <form id="loginForm">
+        <label>Email
+          <input type="email" id="loginEmail" placeholder="staff@biji.com" required />
+        </label>
+        <label>Password
+          <input type="password" id="loginPassword" placeholder="••••••••" required />
+        </label>
+        <p class="form-error hidden" id="loginError"></p>
+        <button class="btn" type="submit">Log in</button>
+      </form>
+      <p class="auth-switch"><a href="/">← Back to website</a></p>
+    </div>
+  </div>
+
+  <!-- ============ APP ============ -->
+  <div id="appView" class="shell hidden">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark">BI<span class="slash">I</span>JI</span>
+        <span class="brand-by">STAFF</span>
+      </div>
+      <button class="nav-item active" data-page="redeem">✦ &nbsp;Redeem Coupon</button>
+      <button class="nav-item" data-page="customers">☺ &nbsp;Customers</button>
+      <button class="nav-item" data-page="overview">▦ &nbsp;Overview</button>
+      <div class="spacer"></div>
+      <div class="whoami"><b id="whoName">—</b><span id="whoRole">—</span></div>
+      <button class="nav-item" id="logoutBtn">⏻ &nbsp;Log out</button>
+    </aside>
+
+    <main class="content">
+      <!-- Redeem -->
+      <section id="page-redeem">
+        <div class="page-head"><h1>Redeem a Coupon</h1></div>
+        <div class="panel">
+          <div class="inline-form">
+            <div style="flex:2">
+              <label>Coupon code</label>
+              <input class="input" id="redeemCode" placeholder="BIJI-XXXXXX" style="text-transform:uppercase;letter-spacing:2px" />
+            </div>
+            <button class="btn" id="checkBtn">Check</button>
+          </div>
+          <p class="msg" id="redeemMsg"></p>
+          <div id="redeemResult" class="redeem-result hidden">
+            <div class="big" id="rDiscount">—</div>
+            <div class="meta" id="rLabel"></div>
+            <div class="meta" id="rCustomer"></div>
+            <div class="meta" id="rExpiry"></div>
+            <div style="margin-top:16px">
+              <button class="btn" id="confirmBtn">Confirm redemption ✓</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Customers -->
+      <section id="page-customers" class="hidden">
+        <div class="page-head"><h1>Customer Lookup</h1></div>
+        <div class="panel">
+          <div class="toolbar">
+            <input class="input" id="custSearch" placeholder="Search name or WhatsApp number…" />
+          </div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Name</th><th>WhatsApp</th><th>DOB</th><th>Coupons</th><th>Joined</th></tr></thead>
+            <tbody id="custRows"></tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- Overview -->
+      <section id="page-overview" class="hidden">
+        <div class="page-head"><h1>Overview</h1></div>
+        <div class="stat-grid" id="statGrid"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/js/staff.js"></script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BIJI — Admin Panel</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/panels.css" />
+</head>
+<body>
+  <!-- ============ AUTH ============ -->
+  <div id="authView" class="auth-wrap hidden">
+    <div class="auth-card">
+      <div class="brand">
+        <span class="brand-mark">BI<span class="slash">I</span>JI</span>
+        <span class="brand-by">BY CHEF BROWN</span>
+      </div>
+
+      <div id="loginPane">
+        <h1>Admin Login</h1>
+        <p class="sub">Customer retention &amp; promotions control centre</p>
+        <form id="loginForm">
+          <label>Email
+            <input type="email" id="loginEmail" placeholder="admin@biji.com" required />
+          </label>
+          <label>Password
+            <input type="password" id="loginPassword" placeholder="••••••••" required />
+          </label>
+          <p class="form-error hidden" id="loginError"></p>
+          <button class="btn" type="submit">Log in</button>
+        </form>
+        <p class="auth-switch hidden" id="signupSwitch">
+          First time? <a id="showSignup">Create the first admin account →</a>
+        </p>
+        <p class="auth-switch"><a href="/">← Back to website</a></p>
+      </div>
+
+      <div id="signupPane" class="hidden">
+        <h1>Create Admin Account</h1>
+        <p class="sub">Only the very first account becomes the admin.</p>
+        <form id="signupForm">
+          <label>Your name
+            <input type="text" id="suName" placeholder="Chef Brown" required />
+          </label>
+          <label>Email
+            <input type="email" id="suEmail" placeholder="admin@biji.com" required />
+          </label>
+          <label>Password (min 8 chars)
+            <input type="password" id="suPassword" placeholder="••••••••" required minlength="8" />
+          </label>
+          <p class="form-error hidden" id="signupError"></p>
+          <button class="btn" type="submit">Create admin account</button>
+        </form>
+        <p class="auth-switch"><a id="showLogin">← Back to login</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ APP ============ -->
+  <div id="appView" class="shell hidden">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark">BI<span class="slash">I</span>JI</span>
+        <span class="brand-by">ADMIN</span>
+      </div>
+      <button class="nav-item active" data-page="dashboard">▦ &nbsp;Dashboard</button>
+      <button class="nav-item" data-page="customers">☺ &nbsp;Customers</button>
+      <button class="nav-item" data-page="coupons">✦ &nbsp;Coupons</button>
+      <button class="nav-item" data-page="campaigns">✉ &nbsp;Campaigns</button>
+      <button class="nav-item" data-page="team">☰ &nbsp;Team</button>
+      <div class="spacer"></div>
+      <div class="whoami"><b id="whoName">—</b><span id="whoRole">—</span></div>
+      <button class="nav-item" id="logoutBtn">⏻ &nbsp;Log out</button>
+    </aside>
+
+    <main class="content">
+      <!-- Dashboard -->
+      <section id="page-dashboard">
+        <div class="page-head"><h1>Dashboard</h1></div>
+        <div class="stat-grid" id="statGrid"></div>
+        <div class="grid-2">
+          <div class="panel">
+            <h2>Newest customers</h2>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Name</th><th>WhatsApp</th><th>DOB</th><th>Joined</th></tr></thead>
+              <tbody id="recentCustomers"></tbody>
+            </table></div>
+          </div>
+          <div class="panel">
+            <h2>Latest redemptions</h2>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Code</th><th>Customer</th><th>Off</th><th>Redeemed</th></tr></thead>
+              <tbody id="recentRedemptions"></tbody>
+            </table></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Customers -->
+      <section id="page-customers" class="hidden">
+        <div class="page-head">
+          <h1>Customer Database</h1>
+          <div class="actions">
+            <button class="btn btn-ghost btn-sm" id="birthdayBtn">🎂 Birthday coupons today</button>
+            <a class="btn btn-sm" href="/api/admin/customers/export">⬇ Export CSV</a>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="toolbar">
+            <input class="input" id="customerSearch" placeholder="Search by name or WhatsApp number…" />
+            <span class="msg" id="customerMsg"></span>
+          </div>
+          <p style="opacity:.6;font-size:12.5px;margin:0 0 10px">Deleting a customer removes their coupons and frees their WhatsApp number to claim again (handy for re-testing).</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Name</th><th>WhatsApp</th><th>DOB</th><th>Coupons</th><th>Joined</th><th></th></tr></thead>
+            <tbody id="customerRows"></tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- Coupons -->
+      <section id="page-coupons" class="hidden">
+        <div class="page-head"><h1>Coupons</h1></div>
+        <div class="panel">
+          <div class="toolbar">
+            <select class="input" id="couponFilter" style="max-width:200px">
+              <option value="all">All coupons</option>
+              <option value="active">Active</option>
+              <option value="redeemed">Redeemed</option>
+              <option value="expired">Expired</option>
+            </select>
+          </div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Code</th><th>Customer</th><th>Discount</th><th>Offer</th><th>Status</th><th>Expires</th><th>Redeemed</th></tr></thead>
+            <tbody id="couponRows"></tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- Campaigns -->
+      <section id="page-campaigns" class="hidden">
+        <div class="page-head"><h1>Promotions &amp; Campaigns</h1></div>
+        <div class="grid-2">
+          <div class="panel">
+            <h2>New campaign</h2>
+            <form id="promoForm">
+              <div class="form-row">
+                <label>Type
+                  <select class="input" id="promoType"></select>
+                </label>
+                <label>Title
+                  <input class="input" id="promoTitle" placeholder="Trending this week 🔥" required />
+                </label>
+                <label>Message (sent on WhatsApp to every customer)
+                  <textarea class="input" id="promoMessage" placeholder="Our Chef's Special Butter Chicken is trending this week… visit BIJI and enjoy 20% off!" required></textarea>
+                </label>
+              </div>
+              <button class="btn" type="submit">Save campaign</button>
+              <p class="msg" id="promoMsg"></p>
+            </form>
+          </div>
+          <div class="panel">
+            <h2>Campaign history</h2>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Campaign</th><th>Type</th><th>Status</th><th>Reached</th><th></th></tr></thead>
+              <tbody id="promoRows"></tbody>
+            </table></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Team -->
+      <section id="page-team" class="hidden">
+        <div class="page-head"><h1>Team Accounts</h1></div>
+        <div class="grid-2">
+          <div class="panel">
+            <h2>Add staff member</h2>
+            <form id="staffForm">
+              <div class="form-row">
+                <label>Name <input class="input" id="stName" required /></label>
+                <label>Email <input class="input" id="stEmail" type="email" required /></label>
+                <label>Password (min 8 chars) <input class="input" id="stPassword" type="password" required minlength="8" /></label>
+                <label>Role
+                  <select class="input" id="stRole">
+                    <option value="staff">Staff — verify &amp; redeem coupons</option>
+                    <option value="admin">Admin — full access</option>
+                  </select>
+                </label>
+              </div>
+              <button class="btn" type="submit">Create account</button>
+              <p class="msg" id="staffMsg"></p>
+            </form>
+          </div>
+          <div class="panel">
+            <h2>All accounts</h2>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th></th></tr></thead>
+              <tbody id="teamRows"></tbody>
+            </table></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>

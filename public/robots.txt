@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /staff
+Disallow: /api/
+
+Sitemap: https://biji.vercel.app/sitemap.xml
